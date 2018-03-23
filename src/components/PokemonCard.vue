@@ -1,11 +1,24 @@
 <template>
   <v-flex xs12 sm4 md4 lg4>
-        <v-progress-circular indeterminate color="red" v-if='loading'></v-progress-circular>  
+    <v-progress-circular indeterminate color="red" v-if='loading'></v-progress-circular>
     <v-card v-if='!loading'>
-      <v-flex :class='colorClass'>
-        <v-card-media contain :src='sprite' height='150px'></v-card-media>
-      </v-flex>
-      <v-card-title :class='colorClass + "--text"'>{{pokemon.name | capitalize}}</v-card-title>
+      <transition v-if='front'>
+        <div @click='flipCard()'>
+          <v-flex :class='colorClass'>
+            <v-card-media contain :src='sprite' height='150px'></v-card-media>
+          </v-flex>
+          <v-card-title :class='colorClass + "--text"'>{{pokemon.name | capitalize}}</v-card-title>
+        </div>
+      </transition>
+      <transition name='flip' v-else>
+        <div @click='flipCard()'>
+          <v-flex :class='colorClass'>
+            <v-card-media contain :src='back_sprite' height='150px'></v-card-media>
+          </v-flex>
+          <v-card-title :class='colorClass + "--text"'>{{pokemon.name | capitalize}}</v-card-title>
+        </div>
+      </transition>
+
     </v-card>
   </v-flex>
 </template>
@@ -30,6 +43,11 @@
       sprite: function () {
         if (this.pokemon != undefined) {
           return this.pokemon.sprites.front_default;
+        }
+      },
+      back_sprite: function (){
+        if(this.pokemon != undefined){
+          return this.pokemon.sprites.back_default;
         }
       },
       colorClass: function () {
@@ -87,19 +105,29 @@
         }
       }
     },
-    data: () => {
+    data() {
       return {
-        pokemon: undefined
+        pokemon: undefined,
+        loading: true,
+        front: true
+      }
+    },
+    methods: {
+      flipCard: function () {
+        let vm = this;
+        console.log('hello')
+        vm.front = !vm.front
       }
     },
     created() {
-      this.loading = true;
-      this.$http.get('/pokemon/' + this.pokeNo).then((data) => {
-        this.pokemon = data.data;
-        this.loading = false;
+      let vm = this;
+      vm.loading = true;
+      vm.$http.get('/pokemon/' + this.pokeNo).then((data) => {
+        vm.pokemon = data.data;
+        vm.loading = false;
       }).catch((error) => {
         console.log(error)
-        this.loading = false;
+        vm.loading = false;
       })
     }
   }

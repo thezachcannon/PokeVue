@@ -1,15 +1,23 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer v-model='mini' app fixed left :mini-variant="mini">
+    <!-- <v-navigation-drawer v-model='mini' app fixed left :mini-variant="mini">
       <v-list>
       </v-list>
-    </v-navigation-drawer>
-    <v-toolbar app>
+    </v-navigation-drawer> -->
+    <!-- <v-toolbar app>
       <v-toolbar-side-icon @click.native.stop='mini = !mini'></v-toolbar-side-icon>
-    </v-toolbar>
-    <v-content>
-      <router-view/>
-    </v-content>
+    </v-toolbar> -->
+    <main>
+      <v-container>
+        <router-view/>
+      </v-container>
+    </main>
+    <v-footer app>
+      <v-flex text-xs-center>
+      <v-icon>code</v-icon> by <a href='https://github.com/thezachcannon' target="_blank">TheZachCannon</a>
+        
+      </v-flex>
+    </v-footer>
   </v-app>
 </template>
 
